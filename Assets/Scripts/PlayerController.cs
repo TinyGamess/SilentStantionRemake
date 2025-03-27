@@ -9,25 +9,17 @@ public class PlayerController : MonoBehaviour
     public float crouchHeight = 0.5f;
     public float normalHeight = 2f;
     public LayerMask groundLayer;
-    public Transform playerCamera;
-    public float lookSpeedX = 2f;
-    public float lookSpeedY = 2f;
-    public float upperLookLimit = 80f;
-    public float lowerLookLimit = 80f;
 
     private Rigidbody rb;
     private CapsuleCollider col;
     private bool isGrounded;
     private bool isCrouching;
-    private float rotationX = 0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         col = GetComponent<CapsuleCollider>();
-        Cursor.lockState = CursorLockMode.Locked;  // Блокировка курсора
-        Cursor.visible = false;  // Скрытие курсора
     }
 
     void Update()
@@ -35,7 +27,6 @@ public class PlayerController : MonoBehaviour
         Move();
         Jump();
         Crouch();
-        LookAround();
     }
 
     void Move()
@@ -83,17 +74,5 @@ public class PlayerController : MonoBehaviour
             col.height = normalHeight;
             transform.localScale = Vector3.one;
         }
-    }
-
-    void LookAround()
-    {
-        float mouseX = Input.GetAxis("Mouse X") * lookSpeedX;
-        float mouseY = Input.GetAxis("Mouse Y") * lookSpeedY;
-
-        rotationX -= mouseY;
-        rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
-
-        playerCamera.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
     }
 }
